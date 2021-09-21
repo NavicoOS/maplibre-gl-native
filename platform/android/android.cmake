@@ -5,6 +5,7 @@ endif()
 target_compile_definitions(
     mbgl-core
     PUBLIC MBGL_USE_GLES2
+    PUBLIC MBGL_USE_GLES3
 )
 
 include(${PROJECT_SOURCE_DIR}/vendor/icu.cmake)
@@ -24,7 +25,6 @@ target_link_libraries(
         $<$<CONFIG:Release>:-O2>
         $<$<CONFIG:Release>:-Wl,--icf=all>
         $<$<CONFIG:Release>:-flto>
-        $<$<CONFIG:Release>:-fuse-ld=gold>
 )
 
 target_sources(
@@ -83,7 +83,7 @@ target_link_libraries(
     mbgl-core
     PRIVATE
         EGL
-        GLESv2
+        GLESv3
         Mapbox::Base::jni.hpp
         android
         atomic
@@ -107,7 +107,7 @@ target_include_directories(
 target_link_libraries(
     example-custom-layer
     PRIVATE
-        GLESv2
+        GLESv3
         Mapbox::Base
         Mapbox::Base::optional
         log
@@ -269,4 +269,8 @@ add_custom_command(
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
 )
 
-install(TARGETS mbgl-render-test-runner LIBRARY DESTINATION lib)
+if(WIN32 OR MINGW) #  <- in r22 not WIN32, but MINGW is set according to https://github.com/android/ndk/issues/1427
+    install(TARGETS mbgl-render-test-runner DESTINATION lib)
+else()
+    install(TARGETS mbgl-render-test-runner LIBRARY DESTINATION lib)
+endif()

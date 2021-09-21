@@ -313,6 +313,13 @@ extern void (* const glVertexAttribPointer)(GLuint, GLint, GLenum, GLboolean, GL
 /// Pointer to glViewport OpenGL function.
 extern void (* const glViewport)(GLint, GLint, GLsizei, GLsizei);
 
+#ifdef MBGL_USE_GLES3
+/// Pointer to glMapBufferRange OpenGL function.
+extern void* (* const glMapBufferRange)(GLenum, GLintptr, GLsizeiptr, GLbitfield);
+/// Pointer to glUnmapBuffer OpenGL function.
+extern GLboolean (* const glUnmapBuffer)(GLenum);
+#endif
+
 #ifndef MBGL_USE_GLES2
 /// Pointer to glDrawPixels OpenGL function.
 extern void (* const glDrawPixels)(GLsizei, GLsizei, GLenum, GLenum, const GLvoid *);

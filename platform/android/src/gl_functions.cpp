@@ -1,8 +1,13 @@
 #include <mbgl/platform/gl_functions.hpp>
 
 #define GL_GLEXT_PROTOTYPES
+#if MBGL_USE_GLES3
+#include <GLES3/gl3.h>
+#include <GLES3/gl3ext.h>
+#else
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#endif
 
 namespace mbgl {
 namespace platform {
@@ -151,6 +156,11 @@ void (* const glVertexAttrib4f)(GLuint, GLfloat, GLfloat, GLfloat, GLfloat) = ::
 void (* const glVertexAttrib4fv)(GLuint, const GLfloat *) = ::glVertexAttrib4fv;
 void (* const glVertexAttribPointer)(GLuint, GLint, GLenum, GLboolean, GLsizei, const void *) = ::glVertexAttribPointer;
 void (* const glViewport)(GLint, GLint, GLsizei, GLsizei) = ::glViewport;
+
+#ifdef MBGL_USE_GLES3
+void* (* const glMapBufferRange)(GLenum, GLintptr, GLsizeiptr, GLbitfield) = ::glMapBufferRange;
+GLboolean (* const glUnmapBuffer)(GLenum) = ::glUnmapBuffer;
+#endif
 
 }  // namespace platform
 }  // namespace mbgl

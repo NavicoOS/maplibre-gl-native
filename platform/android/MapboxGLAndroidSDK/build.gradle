@@ -13,7 +13,7 @@ dependencies {
     implementation dependenciesList.supportAnnotations
     implementation dependenciesList.supportFragmentV4
     implementation dependenciesList.okhttp3
-    implementation dependenciesList.gmsLocation
+    compileOnly dependenciesList.gmsLocation
 
     testImplementation dependenciesList.junit
     testImplementation dependenciesList.mockito

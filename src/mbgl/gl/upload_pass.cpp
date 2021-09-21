@@ -34,7 +34,13 @@ void UploadPass::updateVertexBufferResource(gfx::VertexBufferResource& resource,
                                             const void* data,
                                             std::size_t size) {
     commandEncoder.context.vertexBuffer = static_cast<gl::VertexBufferResource&>(resource).buffer;
+#ifdef MBGL_USE_GLES3
+    void* buffer = MBGL_CHECK_ERROR(glMapBufferRange(GL_ARRAY_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+    memcpy(buffer, data, size);
+    MBGL_CHECK_ERROR(glUnmapBuffer(GL_ARRAY_BUFFER));
+#else
     MBGL_CHECK_ERROR(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
+#endif
 }
 
 std::unique_ptr<gfx::IndexBufferResource> UploadPass::createIndexBufferResource(
@@ -60,7 +66,13 @@ void UploadPass::updateIndexBufferResource(gfx::IndexBufferResource& resource,
     commandEncoder.context.bindVertexArray = 0;
     commandEncoder.context.globalVertexArrayState.indexBuffer =
         static_cast<gl::IndexBufferResource&>(resource).buffer;
+#ifdef MBGL_USE_GLES3
+    void* buffer = MBGL_CHECK_ERROR(glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, size, GL_MAP_WRITE_BIT | GL_MAP_UNSYNCHRONIZED_BIT | GL_MAP_INVALIDATE_BUFFER_BIT));
+    memcpy(buffer, data, size);
+    MBGL_CHECK_ERROR(glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER));
+#else
     MBGL_CHECK_ERROR(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, size, data));
+#endif
 }
 
 std::unique_ptr<gfx::TextureResource>

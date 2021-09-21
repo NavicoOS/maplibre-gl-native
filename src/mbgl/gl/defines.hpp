@@ -164,6 +164,13 @@
 #define GL_VERTEX_SHADER 0x8B31
 #define GL_VIEWPORT 0x0BA2
 #define GL_ZERO 0
+#ifdef MBGL_USE_GLES3
+#define GL_MAP_WRITE_BIT                  0x0002
+#define GL_MAP_INVALIDATE_RANGE_BIT       0x0004
+#define GL_MAP_INVALIDATE_BUFFER_BIT      0x0008
+#define GL_MAP_FLUSH_EXPLICIT_BIT         0x0010
+#define GL_MAP_UNSYNCHRONIZED_BIT         0x0020
+#endif
 #ifdef MBGL_USE_GLES2
 #define GL_HALF_FLOAT 0x8D61
 #else

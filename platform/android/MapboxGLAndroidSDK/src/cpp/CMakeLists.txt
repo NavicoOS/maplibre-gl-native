@@ -197,20 +197,23 @@ target_include_directories(
           ../../../../default/include)
 
 target_compile_options(mapbox-gl
-                       PRIVATE $<$<CONFIG:Release>:-Oz>
+                       PRIVATE $<$<CONFIG:Release>:-O2>
                                $<$<CONFIG:Release>:-Qunused-arguments>
                                $<$<CONFIG:Release>:-flto>
                                $<$<CONFIG:Release>:-fvisibility=hidden>
                                $<$<CONFIG:Release>:-fvisibility-inlines-hidden>)
 
 target_link_libraries(mapbox-gl
-                      PRIVATE $<$<CONFIG:Release>:-Oz>
+                      PRIVATE $<$<CONFIG:Release>:-O2>
                               $<$<CONFIG:Release>:-Wl,--icf=all>
                               $<$<CONFIG:Release>:-Wl,--gc-sections>
                               $<$<CONFIG:Release>:-flto>
-                              $<$<CONFIG:Release>:-fuse-ld=gold>
                               Mapbox::Base::jni.hpp
                               mbgl-core
                               mbgl-vendor-unique_resource)
 
-install(TARGETS mapbox-gl LIBRARY DESTINATION lib)
+if(WIN32 OR MINGW) #  <- in r22 not WIN32, but MINGW is set according to https://github.com/android/ndk/issues/1427
+    install(TARGETS mapbox-gl DESTINATION lib)
+else()
+    install(TARGETS mapbox-gl LIBRARY DESTINATION lib)
+endif()
